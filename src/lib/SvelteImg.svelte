@@ -35,7 +35,10 @@ $: if (src.length) {
       const { src, width, height } = group[group.length - 1]
       groups.push({
         format: format === 'jpg' ? 'jpeg' : format,
-        srcset: group.reduce((a, c) => [...a, `${c.src} ${c.width}w`], []).join(','),
+        srcset: group.reduce((a, c, i, arr) => {
+          const is2x = arr.some((obj) => obj.width === c.width * 2 && obj !== c);
+          return [...a, `${c.src} ${c.width}w${is2x ? ' 2x' : ' 1x'}`];
+        }, []).join(','),
         src,
         width,
         height
